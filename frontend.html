@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket</title>
+</head>
+<body>
+    <script>
+        const ws = new WebSocket("ws://localhost:3000");
+
+        ws.onopen = (data) => {
+            console.log("Success connected");
+        }
+
+        ws.onmessage = (event) => console.log(event.data);
+    </script>
+</body>
+</html>
