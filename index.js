@@ -1,8 +1,10 @@
+const express = require('express');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 require('dotenv').config();
 
-const httpServer = createServer();
+const app = express();
+const httpServer = createServer(app);
 
 const { ALLOWED_URL, PORT = 3000 } = process.env;
 
@@ -16,9 +18,7 @@ wsServer.on("connection", (socket) => {
     socket.on("chat-message", (data) => {
         socket.broadcast.emit("chat-message", data);
     })
-})
-
-wsServer.on("connection", (socket) => {
+    
     socket.on("chat-user", (user) => {
         const systemMessage = {
             name: 'SYSTEM',
