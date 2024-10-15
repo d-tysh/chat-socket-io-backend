@@ -18,6 +18,16 @@ wsServer.on("connection", (socket) => {
     })
 })
 
+wsServer.on("connection", (socket) => {
+    socket.on("chat-user", (user) => {
+        const systemMessage = {
+            name: 'SYSTEM',
+            message: `${user} joined to chat`
+        }
+        socket.broadcast.emit("chat-user", systemMessage);
+    })
+})
+
 httpServer.listen(PORT, () => {
     console.log(`Server started on the port ${PORT}`);
 })
