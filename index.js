@@ -15,14 +15,30 @@ const wsServer = new Server(httpServer, {
 })
 
 wsServer.on("connection", (socket) => {
+    let userName;
+
+    socket.on("chat-user", (user) => {
+        userName = user;
+        const { size } = wsServer.sockets.adapter.rooms;
+        const systemMessage = {
+            name: 'SYSTEM',
+            message: `${user} joined to chat`,
+            usersCount: size
+        }
+        socket.emit("chat-user", systemMessage);
+        socket.broadcast.emit("chat-user", systemMessage);
+    })
+
     socket.on("chat-message", (data) => {
         socket.broadcast.emit("chat-message", data);
     })
-    
-    socket.on("chat-user", (user) => {
+
+    socket.on('disconnect', () => {
+        const { size } = wsServer.sockets.adapter.rooms;
         const systemMessage = {
             name: 'SYSTEM',
-            message: `${user} joined to chat`
+            message: `${userName} left the chat`,
+            usersCount: size
         }
         socket.broadcast.emit("chat-user", systemMessage);
     })
